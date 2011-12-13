@@ -1,0 +1,98 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<!-- dbus-sharp 0.7.0 -->
+<node>
+  <!-->interface name="org.freedesktop.DBus.Introspectable">
+    <method name="Introspect">
+      <arg name="data" direction="out" type="s" />
+    </method>
+  </interface>
+  <interface name="org.freedesktop.DBus.Properties">
+    <method name="Get">
+      <arg name="interface" direction="in" type="s" />
+      <arg name="propname" direction="in" type="s" />
+      <arg name="value" direction="out" type="v" />
+    </method>
+    <method name="Set">
+      <arg name="interface" direction="in" type="s" />
+      <arg name="propname" direction="in" type="s" />
+      <arg name="value" direction="in" type="v" />
+    </method>
+    <method name="GetAll">
+      <arg name="interface" direction="in" type="s" />
+      <arg name="props" direction="out" type="a{sv}" />
+    </method>
+    <signal name="PropertiesChanged">
+      <arg name="interface" direction="out" type="s" />
+      <arg name="changed_properties" direction="out" type="a{sv}" />
+      <annotation name="com.trolltech.QtDBus.QtTypeName" value="QVariantMap"/>
+      <arg name="invalidated_properties" direction="out" type="as" />
+    </signal>
+  </interface -->
+  <interface name="org.mpris.MediaPlayer2">
+    <method name="Quit" />
+    <method name="Raise" />
+    <property name="CanQuit" type="b" access="read" />
+    <property name="CanRaise" type="b" access="read" />
+    <property name="HasTrackList" type="b" access="read" />
+    <property name="Identity" type="s" access="read" />
+    <property name="DesktopEntry" type="s" access="read" />
+    <property name="SupportedUriSchemes" type="as" access="read" />
+    <property name="SupportedMimeTypes" type="as" access="read" />
+  </interface>
+  <interface name="org.mpris.MediaPlayer2.Player">
+    <method name="Next" />
+    <method name="Previous" />
+    <method name="Pause" />
+    <method name="PlayPause" />
+    <method name="Stop" />
+    <method name="Play" />
+    <method name="Seek">
+      <arg name="offset" direction="in" type="x" />
+    </method>
+    <method name="SetPosition">
+      <arg name="trackid" direction="in" type="s" />
+      <arg name="position" direction="in" type="x" />
+    </method>
+    <method name="OpenUri">
+      <arg name="uri" direction="in" type="s" />
+    </method>
+    <signal name="Seeked">
+      <arg name="position" direction="out" type="x" />
+    </signal>
+    <property name="CanControl" type="b" access="read" />
+    <property name="CanGoNext" type="b" access="read" />
+    <property name="CanGoPrevious" type="b" access="read" />
+    <property name="CanPause" type="b" access="read" />
+    <property name="CanPlay" type="b" access="read" />
+    <property name="CanSeek" type="b" access="read" />
+    <property name="MinimumRate" type="d" access="read" />
+    <property name="MaximumRate" type="d" access="read" />
+    <property name="Rate" type="d" access="readwrite" />
+    <property name="Shuffle" type="b" access="readwrite" />
+    <property name="LoopStatus" type="s" access="readwrite" />
+    <property name="PlaybackStatus" type="s" access="read" />
+    <property name="Metadata" type="a{sv}" access="read">
+      <annotation name="com.trolltech.QtDBus.QtTypeName" value="QVariantMap"/>
+    </property>
+        <property name="Volume" type="d" access="readwrite" />
+    <property name="Position" type="x" access="read" />
+  </interface>
+  <interface name="org.mpris.MediaPlayer2.Playlists">
+    <method name="ActivatePlaylist">
+      <arg name="playlist_id" direction="in" type="o" />
+    </method>
+    <method name="GetPlaylists">
+      <arg name="index" direction="in" type="u" />
+      <arg name="max_count" direction="in" type="u" />
+      <arg name="order" direction="in" type="s" />
+      <arg name="reverse_order" direction="in" type="b" />
+      <arg name="ret" direction="out" type="a(oss)" />
+    </method>
+    <signal name="PlaylistChanged">
+      <arg name="playlist" direction="out" type="(oss)" />
+    </signal>
+    <property name="PlaylistCount" type="u" access="read" />
+    <property name="Orderings" type="as" access="read" />
+    <property name="ActivePlaylist" type="(b(oss))" access="read" />
+  </interface>
+</node>

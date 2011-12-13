@@ -1,0 +1,58 @@
+#include <QObject>
+#include <QDeclarativeItem>
+#include <QTime>
+
+#ifndef SOURCE_H
+#define SOURCE_H
+
+class Source : public QDeclarativeItem
+{
+	Q_OBJECT
+	Q_ENUMS(PlayStatus);
+	Q_ENUMS(RepeatStatus);
+	
+public:
+	enum PlayStatus
+	{
+		PLAY_PLAYING = 0,
+		PLAY_PAUSED,
+		PLAY_STOPPED
+	};
+
+	enum RepeatStatus
+	{
+		REPEAT_NONE = 0,
+		REPEAT_ALL,
+		REPEAT_SINGLE
+	};
+
+	Source(QDeclarativeItem *parent);
+	Source();
+
+	virtual void disconnect() {};
+	
+	virtual void playpause() {};
+	virtual void next() {};
+	virtual void previous() {};
+	virtual void toggleShuffle() {};
+	virtual void toggleRepeat() {};
+	
+	virtual QString getTitle() { return ""; };
+	virtual QString getArtist() {return ""; };
+	virtual QString getAlbum() {return ""; };
+	virtual QTime getLength() {return QTime(0,0,0);};
+	virtual QTime position() {return QTime(0,0,0);};
+	virtual PlayStatus getPlayStatus() { return PLAY_PLAYING; }
+	virtual RepeatStatus getRepeatStatus() { return REPEAT_NONE; }
+	virtual bool getShuffleStatus() { return false; }
+	
+signals:
+	void playbackStatusChanged();
+	void repeatStatusChanged();
+	void shuffleStatusChanged();
+	void trackChanged();
+	
+
+};
+
+#endif // SOURCE_H
