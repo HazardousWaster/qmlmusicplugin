@@ -2,14 +2,16 @@
 #include "mprisstatus.h"
 #include "mpris2playerproxy.h"
 
+#ifndef MPRIS2SOURCE_H
+#define MPRIS2SOURCE_H
+
 class Mpris2Source : public Source
 {
 	Q_OBJECT
 	
 public:
-    virtual inline const char *serviceName() { return "org.mpris.MediaPlayer2.banshee"; }
-	
-	Mpris2Source();
+	Mpris2Source(char *serviceName);
+
 	void disconnect() { m_playerProxy->Stop(); }
 	void playpause();
 	void next() { m_playerProxy->Next(); }
@@ -64,3 +66,5 @@ private:
 	bool shuffleStatus;
 
 };
+
+#endif // MPRIS2SOURCE_H

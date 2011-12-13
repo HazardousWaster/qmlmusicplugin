@@ -2,9 +2,9 @@
 #include "mprisplayerproxy.h"
 #include "mprisstatus.h"
 
-MprisSource::MprisSource()
+MprisSource::MprisSource(char *serviceName)
 {
-	m_playerProxy = new MprisPlayerProxy(serviceName(),
+	m_playerProxy = new MprisPlayerProxy(serviceName,
 										"/Player",
 										QDBusConnection::sessionBus(),
 										static_cast<QObject*>(this));

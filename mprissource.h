@@ -7,9 +7,8 @@ class MprisSource : public Source
 	Q_OBJECT
 	
 public:
-    virtual inline const char *serviceName() { return "org.mpris.vlc"; }
-	
-	MprisSource();
+    MprisSource(char *serviceName);
+
 	void disconnect() { m_playerProxy->Stop(); }
 	void playpause();
 	void next() { m_playerProxy->Next(); }

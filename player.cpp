@@ -3,6 +3,8 @@
 #include "player.h"
 #include "vlcsource.h"
 #include "mpris2source.h"
+#include "bansheesource.h"
+#include "spotifysource.h"
 
 Player::Player(QDeclarativeItem *parent)
 	: QDeclarativeItem(parent)
@@ -13,7 +15,7 @@ Player::Player(QDeclarativeItem *parent)
 Player::Player()
 {
 	isBanshee = true;
-	m_source = new Mpris2Source();
+	m_source = new BansheeSource();
 
 	connectSignals();
 }
@@ -41,7 +43,7 @@ void Player::changeSource()
 	{
 		isBanshee = true;
 		m_source->disconnect();
-		m_source = new Mpris2Source();
+		m_source = new SpotifySource();
 		emit sourceChanged("Banshee");
 		connectSignals();
 	}

@@ -48,8 +48,14 @@
     <ClInclude Include="source.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="spotifysource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="vlcsource.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bansheesource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

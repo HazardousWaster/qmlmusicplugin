@@ -1,9 +1,9 @@
 #include "mpris2source.h"
 #include "mpris2playerproxy.h"
 
-Mpris2Source::Mpris2Source()
+Mpris2Source::Mpris2Source(char *serviceName)
 {
-	m_playerProxy = new Mpris2PlayerProxy(serviceName(),
+	m_playerProxy = new Mpris2PlayerProxy(serviceName,
 										"/org/mpris/MediaPlayer2",
 										QDBusConnection::sessionBus(),
 										static_cast<QObject*>(this));
@@ -18,7 +18,7 @@ Mpris2Source::Mpris2Source()
 		qDebug() << opath.path();
 	}
 
-	m_dbusInterface = new QDBusInterface(serviceName(), "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), static_cast<QObject*>(this));
+	m_dbusInterface = new QDBusInterface(serviceName, "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), static_cast<QObject*>(this));
 	QStringList matchArgs;
     matchArgs << "org.mpris.MediaPlayer2.Player";
 	QDBusConnection::sessionBus().connect(m_dbusInterface->service(),
