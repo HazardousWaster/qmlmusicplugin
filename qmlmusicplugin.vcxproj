@@ -61,6 +61,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="auxsource.h" />
     <ClInclude Include="bansheesource.h" />
     <ClInclude Include="dbuspropertyproxy.h" />
     <ClInclude Include="fourints.h" />
@@ -74,9 +75,11 @@
     <ClInclude Include="QmlMusicPlugin.h" />
     <ClInclude Include="source.h" />
     <ClInclude Include="spotifysource.h" />
+    <ClInclude Include="tracksource.h" />
     <ClInclude Include="vlcsource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="auxsource.cpp" />
     <ClCompile Include="dbuspropertyproxy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mpris2playerproxy.cpp" />

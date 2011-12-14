@@ -13,8 +13,12 @@ public:
 	Player();
 
 	void connectSignals();
+	void disconnectSignals();
 
-	Q_PROPERTY(QString source READ source NOTIFY sourceChanged);
+	Q_PROPERTY(QDeclarativeListProperty<Source> sources READ sources);
+	Q_PROPERTY(QString activeSourceName READ activeSourceName NOTIFY activeSourceNameChanged);
+	Q_PROPERTY(QString infoLine1 READ infoLine1 NOTIFY infoLine1Changed);
+	Q_PROPERTY(QString infoLine2 READ infoLine2 NOTIFY infoLine2Changed);
 	Q_PROPERTY(QString title READ title NOTIFY titleChanged);
 	Q_PROPERTY(QString artist READ artist NOTIFY artistChanged);
 	Q_PROPERTY(QString album READ album NOTIFY albumChanged);
@@ -27,14 +31,17 @@ public:
 	//Q_PROPERTY(QString repeat READ repeat);
 	//Q_PROPERTY(bool shuffle READ isShuffling WRITE setShuffle);
 	
-	Q_INVOKABLE void changeSource();
+	Q_INVOKABLE void selectSource(QString name);
 	Q_INVOKABLE void playpause();
 	Q_INVOKABLE void next();
 	Q_INVOKABLE void previous();
 	Q_INVOKABLE void toggleShuffle();
 	Q_INVOKABLE void toggleRepeat();
 	
-	QString source();
+	QDeclarativeListProperty<Source> sources() { return QDeclarativeListProperty<Source>(this, m_sources); }
+	QString activeSourceName();
+	QString infoLine1();
+	QString infoLine2();
 	QString title();
 	QString artist();
 	QString album();
@@ -45,13 +52,17 @@ public:
 	bool shuffleStatus();
 
 public slots:
+	void infoLine1Changed();
+	void infoLine2Changed();
 	void playbackStatusChanged();
 	void repeatStatusChanged();
 	void shuffleStatusChanged();
 	void trackChanged();
 	
 signals:
-	void sourceChanged(QString newSource);
+	void activeSourceNameChanged(QString newActiveSourceName);
+	void infoLine1Changed(QString newInfoLine1);
+	void infoLine2Changed(QString newInfoLine2);
 	void titleChanged(QString newTitle);
 	void artistChanged(QString newArtist);
 	void albumChanged(QString newAlbum);
@@ -67,7 +78,8 @@ signals:
 
 
 private:
-	Source *m_source;
+	QList<Source*> m_sources;
+	Source *m_activeSource;
 
 	bool isBanshee;
 };

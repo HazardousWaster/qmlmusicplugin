@@ -57,6 +57,12 @@
     <ClInclude Include="bansheesource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="auxsource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tracksource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbuspropertyproxy.cpp">
@@ -90,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="auxsource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

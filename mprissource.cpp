@@ -8,7 +8,10 @@ MprisSource::MprisSource(char *serviceName)
 										"/Player",
 										QDBusConnection::sessionBus(),
 										static_cast<QObject*>(this));
+}
 
+void MprisSource::enable()
+{
 	QDBusObjectPath opath;
 	QDBusPendingReply<QList<QDBusObjectPath> > reply = m_playerProxy->Play();
 	reply.waitForFinished();
@@ -46,6 +49,11 @@ MprisSource::MprisSource(char *serviceName)
 	shuffleStatus = (in0.i2 == 1);
 }
 
+void MprisSource::disable()
+{
+	m_playerProxy->Stop();
+}
+
 void MprisSource::playpause()
 {	
 	if (playStatus == PLAY_PLAYING)
@@ -73,6 +81,16 @@ void MprisSource::toggleRepeat()
 		m_playerProxy->Repeat(true);
 	else
 		m_playerProxy->Repeat(false);
+}
+
+QString MprisSource::getInfoLine1()
+{
+	return title + " - " + artist;
+}
+
+QString MprisSource::getInfoLine2()
+{
+	return length.toString();
 }
 
 QString MprisSource::getTitle()
@@ -160,4 +178,6 @@ void MprisSource::trackChange(const QVariantMap &in0)
 	}
 	length = QTime(0, 0, 0).addSecs(reply3.value().value("time").toInt());*/
 	emit trackChanged();
+	emit infoLine1Changed();
+	emit infoLine2Changed();
 }

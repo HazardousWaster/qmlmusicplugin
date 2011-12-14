@@ -7,6 +7,9 @@ class VlcSource : public MprisSource
 public:
     VlcSource() : MprisSource("org.mpris.vlc")
 	{
-
+		setObjectName("VLC");
+		setProperty("name", "VLC");
 	}
+
+	QString getName() { return "VLC"; };
 };

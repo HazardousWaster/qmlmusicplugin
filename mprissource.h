@@ -9,13 +9,17 @@ class MprisSource : public Source
 public:
     MprisSource(char *serviceName);
 
-	void disconnect() { m_playerProxy->Stop(); }
+	void enable();
+	void disable();
 	void playpause();
 	void next() { m_playerProxy->Next(); }
 	void previous() { m_playerProxy->Prev(); }
 	void toggleShuffle();
 	void toggleRepeat();
 	
+	QString getInfoLine1();
+	QString getInfoLine2();
+
 	QString getTitle();
 	QString getArtist();
 	QString getAlbum();
@@ -32,7 +36,7 @@ public slots:
 
 private:
 	MprisPlayerProxy *m_playerProxy;
-	
+
 	QString title;
 	QString artist;
 	QString album;

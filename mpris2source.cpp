@@ -8,8 +8,14 @@ Mpris2Source::Mpris2Source(char *serviceName)
 										QDBusConnection::sessionBus(),
 										static_cast<QObject*>(this));
 
+	m_dbusInterface = new QDBusInterface(serviceName, "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), static_cast<QObject*>(this));
+}
+
+void Mpris2Source::enable()
+{
 	QDBusObjectPath opath;
-	QDBusPendingReply<QList<QDBusObjectPath> > reply = m_playerProxy->Play();
+	QDBusPendingReply<QList<QDBusObjectPath> > reply = m_playerProxy->PlayPause();
+	qDebug("playing");
 	reply.waitForFinished();
 	if (reply.isError()) {
 		qDebug() << reply.error();
@@ -18,7 +24,7 @@ Mpris2Source::Mpris2Source(char *serviceName)
 		qDebug() << opath.path();
 	}
 
-	m_dbusInterface = new QDBusInterface(serviceName, "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), static_cast<QObject*>(this));
+	
 	QStringList matchArgs;
     matchArgs << "org.mpris.MediaPlayer2.Player";
 	QDBusConnection::sessionBus().connect(m_dbusInterface->service(),
@@ -43,6 +49,11 @@ Mpris2Source::Mpris2Source(char *serviceName)
 	repeatStatus = parseLoopStatus(m_playerProxy->loopStatus());
 	
 	shuffleStatus = m_playerProxy->shuffle();
+}
+
+void Mpris2Source::disable()
+{
+	m_playerProxy->Stop();
 }
 
 void Mpris2Source::playpause()
@@ -70,6 +81,16 @@ void Mpris2Source::toggleRepeat()
 		m_playerProxy->setLoopStatus("None");
 		break;
 	}
+}
+
+QString Mpris2Source::getInfoLine1()
+{
+	return title + " - " + artist;
+}
+
+QString Mpris2Source::getInfoLine2()
+{
+	return length.toString();
 }
 
 QString Mpris2Source::getTitle()
@@ -114,50 +135,7 @@ bool Mpris2Source::getShuffleStatus()
 {
 	return shuffleStatus;
 }
-/*
-void Mpris2Source::capsChange(int in0)
-{
-	qDebug() << "Caps changed: " << "\t" << in0;
-}
 
-void Mpris2Source::statusChange(MprisStatus in0)
-{
-	qDebug() << "Status changed: " << "\t" << in0.i1 << "\t" << in0.i2 << "\t" << in0.i3 << "\t" << in0.i4;
-	
-	playStatus = (in0.i1 == 0) ? PLAY_PLAYING : PLAY_PAUSED;
-	repeatStatus = (in0.i4 == 1) ? REPEAT_ALL : ((in0.i3 == 1) ? REPEAT_SINGLE : REPEAT_NONE);
-	shuffleStatus = (in0.i2 == 1);
-	
-	emit statusChanged();
-}
-
-void Mpris2Source::trackChange(const QVariantMap &in0)
-{
-	const QVariantMap qMap = in0;
-	QVariantMap *qMap2 = new QVariantMap(qMap);
-	QVariantMap::Iterator it;
-	qDebug("Track changed:");
-	//qDebug("signal:");
-	for (it = qMap2->begin(); it != qMap2->end(); it++)
-	{
-		qDebug() << it.key() << "\t\t" << it.value().typeName() << "\t\t" << it.value().toString();
-	}
-	
-	title = qMap2->value("title").toString();
-	artist = qMap2->value("artist").toString();
-	album = qMap2->value("album").toString();
-	/*qDebug("metadata:");
-	QDBusPendingReply<QVariantMap> reply3 = m_playerProxy->Metadata();
-	reply3.waitForFinished();*	QVariantMap::Iterator it2;
-	QVariantMap qMap3 = reply3.value();
-	for (it2 = qMap3.begin(); it2 != qMap3.end(); it2++)
-	{
-		qDebug() << it2.key() << "\t\t" << it2.value().typeName() << "\t\t" << it2.value().toString();
-	}
-	length = QTime(0, 0, 0).addSecs(reply3.value().value("time").toInt());
-	emit trackChanged();
-}
-*/
 void Mpris2Source::propertiesChanged(const QString &interface, const QVariantMap &changed_properties, const QStringList &string_list)
 {
 	qDebug() << "Properties changed on interface: " << interface;
@@ -194,6 +172,8 @@ void Mpris2Source::propertiesChanged(const QString &interface, const QVariantMap
 		//shuffleStatus = qMap2->value("Shuffle").toBool();
 		parseMetadata(m_playerProxy->metadata());
 		emit trackChanged();
+		emit infoLine1Changed();
+		emit infoLine2Changed();
 	}
 }
 

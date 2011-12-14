@@ -12,12 +12,17 @@ class Mpris2Source : public Source
 public:
 	Mpris2Source(char *serviceName);
 
-	void disconnect() { m_playerProxy->Stop(); }
+	void enable();
+	void disable();
+
 	void playpause();
 	void next() { m_playerProxy->Next(); }
 	void previous() { m_playerProxy->Previous(); }
 	void toggleShuffle();
 	void toggleRepeat();
+		
+	QString getInfoLine1();
+	QString getInfoLine2();
 	
 	QString getTitle();
 	QString getArtist();
@@ -54,7 +59,10 @@ private:
 
 	void parseMetadata(QVariantMap metadata);
 
+protected:
 	Mpris2PlayerProxy *m_playerProxy;
+
+private:
 	QDBusInterface	*m_dbusInterface;
 	
 	QString title;

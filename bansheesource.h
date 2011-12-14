@@ -7,6 +7,8 @@ class BansheeSource : public Mpris2Source
 public:
     BansheeSource() : Mpris2Source("org.mpris.MediaPlayer2.banshee")
 	{
-
+		setObjectName(getName());
 	}
+
+	QString getName() { return "Banshee"; };
 };

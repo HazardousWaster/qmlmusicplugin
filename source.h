@@ -29,14 +29,21 @@ public:
 	Source(QDeclarativeItem *parent);
 	Source();
 
-	virtual void disconnect() {};
-	
+	Q_PROPERTY(QString name READ getName);
+
+	virtual void enable() {};
+	virtual void disable() {};
+	virtual QString getName() { return "Source"; };
+
 	virtual void playpause() {};
 	virtual void next() {};
 	virtual void previous() {};
 	virtual void toggleShuffle() {};
 	virtual void toggleRepeat() {};
-	
+
+	virtual QString getInfoLine1() { return ""; };
+	virtual QString getInfoLine2() { return ""; };
+
 	virtual QString getTitle() { return ""; };
 	virtual QString getArtist() {return ""; };
 	virtual QString getAlbum() {return ""; };
@@ -47,6 +54,9 @@ public:
 	virtual bool getShuffleStatus() { return false; }
 	
 signals:
+	void infoLine1Changed();
+	void infoLine2Changed();
+
 	void playbackStatusChanged();
 	void repeatStatusChanged();
 	void shuffleStatusChanged();

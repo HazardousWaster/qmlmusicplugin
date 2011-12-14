@@ -12,12 +12,6 @@ class QmlMusicPlugin : public QDeclarativeExtensionPlugin
 {
 	Q_OBJECT
 public:
-	void registerTypes(const char *uri)
-	{
-		Q_ASSERT(uri == QLatin1String("music"));
-		qmlRegisterType<Player>(uri, 1, 0, "Player");
-		qmlRegisterType<Source>(uri, 1, 0, "Source");
-		qDBusRegisterMetaType<MprisStatus>();
-	}
+	void registerTypes(const char *uri);
 };
 
