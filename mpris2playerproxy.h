@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef MPRIS2PLAYERPROXY_H_1323804090
-#define MPRIS2PLAYERPROXY_H_1323804090
+#ifndef MPRIS2PLAYERPROXY_H_1324197705
+#define MPRIS2PLAYERPROXY_H_1324197705
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>

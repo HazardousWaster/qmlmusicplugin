@@ -13,12 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="introspection">
+      <UniqueIdentifier>{7f219f27-47c7-46ac-a933-3a817eed0d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\papafactory">
+      <UniqueIdentifier>{b64fe99a-4409-469b-ba53-0bbe5a252bbb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbuspropertyproxy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fourints.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mpris2playerproxy.h">
@@ -42,9 +45,6 @@
     <ClInclude Include="player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QmlMusicPlugin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -63,12 +63,42 @@
     <ClInclude Include="tracksource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mpris2rootproxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qmlmusicplugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mpris2tracklistproxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="papafactory\details.h">
+      <Filter>Header Files\papafactory</Filter>
+    </ClInclude>
+    <ClInclude Include="papafactory\factory.h">
+      <Filter>Header Files\papafactory</Filter>
+    </ClInclude>
+    <ClInclude Include="papafactory\papa_exception.h">
+      <Filter>Header Files\papafactory</Filter>
+    </ClInclude>
+    <ClInclude Include="papafactory\phactory.h">
+      <Filter>Header Files\papafactory</Filter>
+    </ClInclude>
+    <ClInclude Include="papafactory\singleton.h">
+      <Filter>Header Files\papafactory</Filter>
+    </ClInclude>
+    <ClInclude Include="papafactory\staticfactory.h">
+      <Filter>Header Files\papafactory</Filter>
+    </ClInclude>
+    <ClInclude Include="sourceoption.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sourcemanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbuspropertyproxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mpris2playerproxy.cpp">
@@ -92,21 +122,56 @@
     <ClCompile Include="player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QmlMusicPlugin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="auxsource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tracksource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mpris2rootproxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qmlmusicplugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mpris2tracklistproxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="qmlmusicplugin.pro" />
     <None Include="test.qml" />
-    <None Include="generate_interfaces.sh" />
-    <None Include="introspection\banshee_player.xml" />
-    <None Include="introspection\vlc_player.xml" />
+    <None Include="Content\Button.qml" />
+    <None Include="Content\Marquee.qml" />
+    <None Include="introspection\vlc_player.xml">
+      <Filter>introspection</Filter>
+    </None>
+    <None Include="introspection\banshee_player.xml">
+      <Filter>introspection</Filter>
+    </None>
+    <None Include="introspection\clementine_player.xml">
+      <Filter>introspection</Filter>
+    </None>
+    <None Include="introspection\clementine_tracklist.xml">
+      <Filter>introspection</Filter>
+    </None>
+    <None Include="introspection\clementine_root.xml">
+      <Filter>introspection</Filter>
+    </None>
+    <None Include="introspection\audacious.xml">
+      <Filter>introspection</Filter>
+    </None>
+    <None Include="introspection\vlc_root.xml">
+      <Filter>introspection</Filter>
+    </None>
+    <None Include="generate_interfaces.sh">
+      <Filter>introspection</Filter>
+    </None>
+    <None Include="introspection\clementine_all.xml">
+      <Filter>introspection</Filter>
+    </None>
   </ItemGroup>
 </Project>

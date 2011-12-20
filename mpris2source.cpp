@@ -1,29 +1,91 @@
 #include "mpris2source.h"
 #include "mpris2playerproxy.h"
 
-Mpris2Source::Mpris2Source(char *serviceName)
+QList<SourceOption*> Mpris2Source::getSourceOptions()
 {
-	m_playerProxy = new Mpris2PlayerProxy(serviceName,
+	QList<SourceOption*> options;
+
+	QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
+	if (!reply.isValid()) {
+		qDebug() << "Error:" << reply.error().message();
+	}
+	
+	foreach (QString serviceName, reply.value())
+	{
+		if (serviceName.startsWith("org.mpris.MediaPlayer2"))
+		{
+			QByteArray ba = serviceName.toLocal8Bit();
+
+			Mpris2RootProxy *rootProxy = new Mpris2RootProxy(ba.data(),
+										"/org/mpris/MediaPlayer2",
+										QDBusConnection::sessionBus(),
+										NULL);
+
+			QString fullName = rootProxy->identity()  + " (MPRIS2)";
+			
+			QVariantMap params;
+			params.insert("serviceName", serviceName);
+			SourceOption *option = new SourceOption(fullName, "mpris2source", params);
+			options.append(option);
+		}
+	}
+	
+	return options;
+}
+
+Mpris2Source::Mpris2Source(QVariantMap params)
+{
+	QString serviceName = params.value("serviceName").toString();
+
+	QByteArray ba = serviceName.toLocal8Bit();
+
+	m_playerProxy = new Mpris2PlayerProxy(ba.data(),
 										"/org/mpris/MediaPlayer2",
 										QDBusConnection::sessionBus(),
 										static_cast<QObject*>(this));
+
+	m_rootProxy = new Mpris2RootProxy(ba.data(),
+										"/org/mpris/MediaPlayer2",
+										QDBusConnection::sessionBus(),
+										static_cast<QObject*>(this));
+
+	m_trackListProxy = new Mpris2TrackListProxy(ba.data(),
+										"/org/mpris/MediaPlayer2",
+										QDBusConnection::sessionBus(),
+										static_cast<QObject*>(this));
+
+	name = m_rootProxy->identity()  + " (MPRIS2)";
+
+	m_dbusInterface = new QDBusInterface(serviceName, "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), static_cast<QObject*>(this));
+}
+
+Mpris2Source::Mpris2Source(QString serviceName)
+{
+	QByteArray ba = serviceName.toLocal8Bit();
+
+	m_playerProxy = new Mpris2PlayerProxy(ba.data(),
+										"/org/mpris/MediaPlayer2",
+										QDBusConnection::sessionBus(),
+										static_cast<QObject*>(this));
+
+	m_rootProxy = new Mpris2RootProxy(ba.data(),
+										"/org/mpris/MediaPlayer2",
+										QDBusConnection::sessionBus(),
+										static_cast<QObject*>(this));
+
+	m_trackListProxy = new Mpris2TrackListProxy(ba.data(),
+										"/org/mpris/MediaPlayer2",
+										QDBusConnection::sessionBus(),
+										static_cast<QObject*>(this));
+
+	name = m_rootProxy->identity()  + " (MPRIS2)";
 
 	m_dbusInterface = new QDBusInterface(serviceName, "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", QDBusConnection::sessionBus(), static_cast<QObject*>(this));
 }
 
 void Mpris2Source::enable()
 {
-	QDBusObjectPath opath;
-	QDBusPendingReply<QList<QDBusObjectPath> > reply = m_playerProxy->PlayPause();
-	qDebug("playing");
-	reply.waitForFinished();
-	if (reply.isError()) {
-		qDebug() << reply.error();
-	} else {
-		opath = reply.value().first();
-		qDebug() << opath.path();
-	}
-
+	m_playerProxy->PlayPause();
 	
 	QStringList matchArgs;
     matchArgs << "org.mpris.MediaPlayer2.Player";
@@ -35,25 +97,38 @@ void Mpris2Source::enable()
 										QString(), // signature
 										this,
 										SLOT(propertiesChanged(QString,QVariantMap,QStringList)));
-	
+
 	QVariantMap qMap3 = m_playerProxy->metadata();
 	QVariantMap::Iterator it;
 	for (it = qMap3.begin(); it != qMap3.end(); it++)
 	{
 		qDebug() << it.key() << "\t\t" << it.value().typeName() << "\t\t" << it.value().toString();
 	}
-	
+
 	parseMetadata(m_playerProxy->metadata());
 	
 	playStatus = parsePlaybackStatus(m_playerProxy->playbackStatus());
 	repeatStatus = parseLoopStatus(m_playerProxy->loopStatus());
-	
 	shuffleStatus = m_playerProxy->shuffle();
+
+	//QList<QDBusObjectPath> trackList = m_trackListProxy->tracks();
+	//qDebug() << "yellow" << trackList.count();
+	//QVariantMap tracksMetaData = m_trackListProxy->GetTracksMetadata(trackList);
+	//qDebug() << tracksMetaData;
+	//qDebug() << trackList;
 }
 
 void Mpris2Source::disable()
 {
 	m_playerProxy->Stop();
+}
+
+bool Mpris2Source::checkValid()
+{
+	qDebug() << "Checking: " << name;
+	QString test = m_rootProxy->identity();
+	qDebug() << "result: " << test;
+	return name == test;
 }
 
 void Mpris2Source::playpause()
@@ -83,57 +158,12 @@ void Mpris2Source::toggleRepeat()
 	}
 }
 
-QString Mpris2Source::getInfoLine1()
-{
-	return title + " - " + artist;
-}
-
-QString Mpris2Source::getInfoLine2()
-{
-	return length.toString();
-}
-
-QString Mpris2Source::getTitle()
-{
-	return title;
-}
-
-QString Mpris2Source::getArtist()
-{
-	return artist;
-}
-
-QString Mpris2Source::getAlbum()
-{
-	return album;
-}
-
-QTime Mpris2Source::getLength()
-{
-	return length;
-}
-
 QTime Mpris2Source::position()
 {
 	/*QDBusPendingReply<int> reply = m_playerProxy->PositionGet();
 	reply.waitForFinished();	
 	return QTime(0, 0, 0).addSecs(reply.value() / 1000);*/
 	return QTime(0, 0, 0);
-}
-
-Source::PlayStatus Mpris2Source::getPlayStatus()
-{
-	return playStatus;
-}
-
-Source::RepeatStatus Mpris2Source::getRepeatStatus()
-{
-	return repeatStatus;
-}
-
-bool Mpris2Source::getShuffleStatus()
-{
-	return shuffleStatus;
 }
 
 void Mpris2Source::propertiesChanged(const QString &interface, const QVariantMap &changed_properties, const QStringList &string_list)
@@ -184,3 +214,12 @@ void Mpris2Source::parseMetadata(QVariantMap metadata)
 	album = metadata.value("xesam:album").toString();
 	length = QTime(0, 0, 0).addSecs(metadata.value("mpris:length").toInt()/1000000);
 }
+
+MUSIC_REGISTER_SOURCE("mpris2source", Mpris2Source);
+/*
+namespace
+{
+	papa::registra<Source,Mpris2Source> theRegistra(std::string("mpris2source"));
+}
+
+*/

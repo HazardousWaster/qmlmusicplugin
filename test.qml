@@ -93,7 +93,10 @@ Rectangle {
 
 				Button {
 					text: "Source\n" + player.activeSourceName
-					onClicked: sourceSelect.visible = !sourceSelect.visible
+					onClicked: {
+						player.scanSources(); 
+						sourceSelect.visible = !sourceSelect.visible
+					}
 				}				
 			}
 		
@@ -143,7 +146,7 @@ Rectangle {
 			text: name
 			width: 256
 			height: 64
-			onClicked: { player.selectSource(name); sourceSelect.visible = false }
+			onClicked: { player.selectSource(index); sourceSelect.visible = false }
 		}
 	}
  }

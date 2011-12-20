@@ -2,7 +2,8 @@
 #include <QDeclarativeItem>
 
 #include "source.h"
-
+#include "sourceoption.h"
+#include "sourcemanager.h"
 
 class Player : public QDeclarativeItem
 {
@@ -15,7 +16,7 @@ public:
 	void connectSignals();
 	void disconnectSignals();
 
-	Q_PROPERTY(QDeclarativeListProperty<Source> sources READ sources);
+	Q_PROPERTY(QDeclarativeListProperty<SourceOption> sources READ sources NOTIFY sourceListChanged);
 	Q_PROPERTY(QString activeSourceName READ activeSourceName NOTIFY activeSourceNameChanged);
 	Q_PROPERTY(QString infoLine1 READ infoLine1 NOTIFY infoLine1Changed);
 	Q_PROPERTY(QString infoLine2 READ infoLine2 NOTIFY infoLine2Changed);
@@ -28,17 +29,15 @@ public:
 	Q_PROPERTY(Source::RepeatStatus repeatStatus READ repeatStatus NOTIFY repeatStatusChanged);
 	Q_PROPERTY(bool shuffleStatus READ shuffleStatus NOTIFY shuffleStatusChanged);
 		
-	//Q_PROPERTY(QString repeat READ repeat);
-	//Q_PROPERTY(bool shuffle READ isShuffling WRITE setShuffle);
-	
-	Q_INVOKABLE void selectSource(QString name);
+	Q_INVOKABLE void scanSources();
+	Q_INVOKABLE void selectSource(int index);
 	Q_INVOKABLE void playpause();
 	Q_INVOKABLE void next();
 	Q_INVOKABLE void previous();
 	Q_INVOKABLE void toggleShuffle();
 	Q_INVOKABLE void toggleRepeat();
 	
-	QDeclarativeListProperty<Source> sources() { return QDeclarativeListProperty<Source>(this, m_sources); }
+	QDeclarativeListProperty<SourceOption> sources() { return QDeclarativeListProperty<SourceOption>(this, m_sources); }
 	QString activeSourceName();
 	QString infoLine1();
 	QString infoLine2();
@@ -60,6 +59,7 @@ public slots:
 	void trackChanged();
 	
 signals:
+	void sourceListChanged(QDeclarativeListProperty<SourceOption> sources);
 	void activeSourceNameChanged(QString newActiveSourceName);
 	void infoLine1Changed(QString newInfoLine1);
 	void infoLine2Changed(QString newInfoLine2);
@@ -78,8 +78,9 @@ signals:
 
 
 private:
-	QList<Source*> m_sources;
-	Source *m_activeSource;
+	QList<SourceOption*> m_sources;
+	Source* m_activeSource;
+	boost::shared_ptr<Source> m_sharedSource;
 
 	bool isBanshee;
 };

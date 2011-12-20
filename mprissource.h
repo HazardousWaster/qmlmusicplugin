@@ -1,34 +1,30 @@
-#include "source.h"
+#include "tracksource.h"
 #include "mprisstatus.h"
 #include "mprisplayerproxy.h"
+#include "mprisrootproxy.h"
 
-class MprisSource : public Source
+class MprisSource : public TrackSource
 {
 	Q_OBJECT
 	
 public:
-    MprisSource(char *serviceName);
+	static QList<SourceOption*> getSourceOptions();
+
+	MprisSource(QVariantMap params);
+    MprisSource(QString serviceName);
 
 	void enable();
 	void disable();
+	bool checkValid();
+
 	void playpause();
 	void next() { m_playerProxy->Next(); }
 	void previous() { m_playerProxy->Prev(); }
 	void toggleShuffle();
 	void toggleRepeat();
 	
-	QString getInfoLine1();
-	QString getInfoLine2();
-
-	QString getTitle();
-	QString getArtist();
-	QString getAlbum();
-	QTime getLength();
 	QTime position();
-	PlayStatus getPlayStatus();
-	RepeatStatus getRepeatStatus();
-	bool getShuffleStatus();
-	
+
 public slots:
     void capsChange(int in0);
     void statusChange(MprisStatus in0);
@@ -36,12 +32,6 @@ public slots:
 
 private:
 	MprisPlayerProxy *m_playerProxy;
+	MprisRootProxy *m_rootProxy;
 
-	QString title;
-	QString artist;
-	QString album;
-	QTime length;
-	PlayStatus playStatus;
-	RepeatStatus repeatStatus;
-	bool shuffleStatus;
 };

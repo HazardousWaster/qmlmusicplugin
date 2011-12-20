@@ -1,0 +1,61 @@
+method return sender=:1.16 -> dest=:1.39 reply_serial=2
+   string "<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.freedesktop.MediaPlayer">
+    <method name="GetMetadata">
+      <arg direction="in" type="i"/>
+      <arg direction="out" type="a{sv}"/>
+      <annotation value="QVariantMap" name="com.trolltech.QtDBus.QtTypeName.Out0"/>
+    </method>
+    <method name="GetCurrentTrack">
+      <arg direction="out" type="i"/>
+    </method>
+    <method name="GetLength">
+      <arg direction="out" type="i"/>
+    </method>
+    <method name="AddTrack">
+      <arg direction="in" type="s"/>
+      <arg direction="in" type="b"/>
+      <arg direction="out" type="i"/>
+    </method>
+    <method name="DelTrack">
+      <arg type="i"/>
+    </method>
+    <method name="SetLoop">
+      <arg type="b"/>
+    </method>
+    <method name="SetRandom">
+      <arg type="b"/>
+    </method>
+    <method name="PlayTrack">
+      <arg type="i"/>
+    </method>
+    <signal name="TrackListChange">
+      <arg type="i"/>
+    </signal>
+  </interface>
+  <interface name="org.freedesktop.DBus.Properties">
+    <method name="Get">
+      <arg name="interface_name" type="s" direction="in"/>
+      <arg name="property_name" type="s" direction="in"/>
+      <arg name="value" type="v" direction="out"/>
+    </method>
+    <method name="Set">
+      <arg name="interface_name" type="s" direction="in"/>
+      <arg name="property_name" type="s" direction="in"/>
+      <arg name="value" type="v" direction="in"/>
+    </method>
+    <method name="GetAll">
+      <arg name="interface_name" type="s" direction="in"/>
+      <arg name="values" type="a{sv}" direction="out"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+    </method>
+  </interface>
+  <interface name="org.freedesktop.DBus.Introspectable">
+    <method name="Introspect">
+      <arg name="xml_data" type="s" direction="out"/>
+    </method>
+  </interface>
+</node>
+"

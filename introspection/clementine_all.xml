@@ -1,0 +1,115 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.mpris.MediaPlayer2">
+    <method name="Raise"/>
+    <method name="Quit"/>
+    <property access="read" type="b" name="CanQuit"/>
+    <property access="read" type="b" name="CanRaise"/>
+    <property access="read" type="b" name="HasTrackList"/>
+    <property access="read" type="s" name="Identity"/>
+    <property access="read" type="s" name="DesktopEntry"/>
+    <property access="read" type="as" name="SupportedUriSchemes"/>
+    <property access="read" type="as" name="SupportedMimeTypes"/>
+  </interface>
+  <interface name="org.mpris.MediaPlayer2.Player">
+    <method name="Next"/>
+    <method name="Previous"/>
+    <method name="Pause"/>
+    <method name="PlayPause"/>
+    <method name="Stop"/>
+    <method name="Play"/>
+    <method name="Seek">
+      <arg direction="in" type="x" name="Offset"/>
+    </method>
+    <method name="SetPosition">
+      <arg direction="in" type="o" name="TrackId"/>
+      <arg direction="in" type="x" name="Position"/>
+    </method>
+    <method name="OpenUri">
+      <arg direction="in" type="s" name="Uri"/>
+    </method>
+    <signal name="Seeked">
+      <arg type="x" name="Position"/>
+    </signal>
+    <property access="read" type="s" name="PlaybackStatus"/>
+    <property access="readwrite" type="s" name="LoopStatus"/>
+    <property access="readwrite" type="d" name="Rate"/>
+    <property access="readwrite" type="b" name="Shuffle"/>
+    <property access="read" type="a{sv}" name="Metadata">
+      <annotation value="QVariantMap" name="com.trolltech.QtDBus.QtTypeName"/>
+    </property>
+    <property access="readwrite" type="d" name="Volume"/>
+    <property access="read" type="x" name="Position"/>
+    <property access="read" type="d" name="MinimumRate"/>
+    <property access="read" type="d" name="MaximumRate"/>
+    <property access="read" type="b" name="CanGoNext"/>
+    <property access="read" type="b" name="CanGoPrevious"/>
+    <property access="read" type="b" name="CanPlay"/>
+    <property access="read" type="b" name="CanPause"/>
+    <property access="read" type="b" name="CanSeek"/>
+    <property access="read" type="b" name="CanControl"/>
+  </interface>
+  <interface name="org.mpris.MediaPlayer2.TrackList">
+    <method name="GetTracksMetadata">
+      <arg direction="in" type="ao" name="TrackIds"/>
+      <arg direction="out" type="aa{sv}" name="Metadata">
+        <annotation value="QVariantMap" name="com.trolltech.QtDBus.QtTypeName.Out0"/>
+      </arg>
+    </method>
+    <method name="AddTrack">
+      <arg direction="in" type="s" name="Uri"/>
+      <arg direction="in" type="o" name="AfterTrack"/>
+      <arg direction="in" type="b" name="SetAsCurrent"/>
+    </method>
+    <method name="RemoveTrack">
+      <arg direction="in" type="o" name="TrackId"/>
+    </method>
+    <method name="GoTo">
+      <arg direction="in" type="o" name="TrackId"/>
+    </method>
+    <signal name="TrackListReplaced">
+      <arg type="ao" name="Tracks"/>
+      <arg type="o" name="CurrentTrack"/>
+    </signal>
+    <signal name="TrackAdded">
+      <arg type="a{sv}" name="Metadata">
+        <annotation value="QVariantMap" name="com.trolltech.QtDBus.QtTypeName.In0"/>
+      </arg>
+      <arg type="o" name="AfterTrack"/>
+    </signal>
+    <signal name="TrackRemoved">
+      <arg type="o" name="TrackId"/>
+    </signal>
+    <signal name="TrackMetadataChanged">
+      <arg type="o" name="TrackId"/>
+      <arg type="a{sv}" name="Metadata">
+        <annotation value="QVariantMap" name="com.trolltech.QtDBus.QtTypeName.In1"/>
+      </arg>
+    </signal>
+    <property access="read" type="ao" name="Tracks"/>
+    <property access="read" type="b" name="CanEditTracks"/>
+  </interface>
+  <interface name="org.freedesktop.DBus.Properties">
+    <method name="Get">
+      <arg name="interface_name" type="s" direction="in"/>
+      <arg name="property_name" type="s" direction="in"/>
+      <arg name="value" type="v" direction="out"/>
+    </method>
+    <method name="Set">
+      <arg name="interface_name" type="s" direction="in"/>
+      <arg name="property_name" type="s" direction="in"/>
+      <arg name="value" type="v" direction="in"/>
+    </method>
+    <method name="GetAll">
+      <arg name="interface_name" type="s" direction="in"/>
+      <arg name="values" type="a{sv}" direction="out"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+    </method>
+  </interface>
+  <interface name="org.freedesktop.DBus.Introspectable">
+    <method name="Introspect">
+      <arg name="xml_data" type="s" direction="out"/>
+    </method>
+  </interface>
+</node>

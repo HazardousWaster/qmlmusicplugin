@@ -64,16 +64,25 @@
     <ClInclude Include="auxsource.h" />
     <ClInclude Include="bansheesource.h" />
     <ClInclude Include="dbuspropertyproxy.h" />
-    <ClInclude Include="fourints.h" />
     <ClInclude Include="mpris2playerproxy.h" />
+    <ClInclude Include="mpris2rootproxy.h" />
     <ClInclude Include="mpris2source.h" />
+    <ClInclude Include="mpris2tracklistproxy.h" />
     <ClInclude Include="mprisplayerproxy.h" />
     <ClInclude Include="mprisrootproxy.h" />
     <ClInclude Include="mprissource.h" />
     <ClInclude Include="mprisstatus.h" />
+    <ClInclude Include="papafactory\details.h" />
+    <ClInclude Include="papafactory\factory.h" />
+    <ClInclude Include="papafactory\papa_exception.h" />
+    <ClInclude Include="papafactory\phactory.h" />
+    <ClInclude Include="papafactory\singleton.h" />
+    <ClInclude Include="papafactory\staticfactory.h" />
     <ClInclude Include="player.h" />
-    <ClInclude Include="QmlMusicPlugin.h" />
+    <ClInclude Include="qmlmusicplugin.h" />
     <ClInclude Include="source.h" />
+    <ClInclude Include="sourcemanager.h" />
+    <ClInclude Include="sourceoption.h" />
     <ClInclude Include="spotifysource.h" />
     <ClInclude Include="tracksource.h" />
     <ClInclude Include="vlcsource.h" />
@@ -81,21 +90,33 @@
   <ItemGroup>
     <ClCompile Include="auxsource.cpp" />
     <ClCompile Include="dbuspropertyproxy.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="mpris2playerproxy.cpp" />
+    <ClCompile Include="mpris2rootproxy.cpp" />
     <ClCompile Include="mpris2source.cpp" />
+    <ClCompile Include="mpris2tracklistproxy.cpp" />
     <ClCompile Include="mprisplayerproxy.cpp" />
     <ClCompile Include="mprisrootproxy.cpp" />
     <ClCompile Include="mprissource.cpp" />
     <ClCompile Include="mprisstatus.cpp" />
     <ClCompile Include="player.cpp" />
-    <ClCompile Include="QmlMusicPlugin.cpp" />
+    <ClCompile Include="qmlmusicplugin.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="tracksource.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Button.qml" />
+    <None Include="Content\Marquee.qml" />
     <None Include="generate_interfaces.sh" />
+    <None Include="introspection\audacious.xml" />
     <None Include="introspection\banshee_player.xml" />
+    <None Include="introspection\clementine_all.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="introspection\clementine_player.xml" />
+    <None Include="introspection\clementine_root.xml" />
+    <None Include="introspection\clementine_tracklist.xml" />
     <None Include="introspection\vlc_player.xml" />
+    <None Include="introspection\vlc_root.xml" />
     <None Include="qmlmusicplugin.pro" />
     <None Include="test.qml" />
   </ItemGroup>

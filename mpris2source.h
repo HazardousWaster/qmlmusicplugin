@@ -1,19 +1,25 @@
-#include "source.h"
+#include "tracksource.h"
 #include "mprisstatus.h"
 #include "mpris2playerproxy.h"
+#include "mpris2rootproxy.h"
+#include "mpris2tracklistproxy.h"
 
 #ifndef MPRIS2SOURCE_H
 #define MPRIS2SOURCE_H
 
-class Mpris2Source : public Source
+class Mpris2Source : public TrackSource
 {
 	Q_OBJECT
 	
 public:
-	Mpris2Source(char *serviceName);
+	static QList<SourceOption*> getSourceOptions();
+
+	Mpris2Source(QVariantMap params);
+	Mpris2Source(QString serviceName);
 
 	void enable();
 	void disable();
+	bool checkValid();
 
 	void playpause();
 	void next() { m_playerProxy->Next(); }
@@ -21,17 +27,7 @@ public:
 	void toggleShuffle();
 	void toggleRepeat();
 		
-	QString getInfoLine1();
-	QString getInfoLine2();
-	
-	QString getTitle();
-	QString getArtist();
-	QString getAlbum();
-	QTime getLength();
 	QTime position();
-	PlayStatus getPlayStatus();
-	RepeatStatus getRepeatStatus();
-	bool getShuffleStatus();
 	
 public slots:
 	void propertiesChanged(const QString &interface, const QVariantMap &changed_properties, const QStringList &string_list);
@@ -60,19 +56,12 @@ private:
 	void parseMetadata(QVariantMap metadata);
 
 protected:
+	Mpris2RootProxy *m_rootProxy;
 	Mpris2PlayerProxy *m_playerProxy;
+	Mpris2TrackListProxy *m_trackListProxy;
 
 private:
 	QDBusInterface	*m_dbusInterface;
-	
-	QString title;
-	QString artist;
-	QString album;
-	QTime length;
-	PlayStatus playStatus;
-	RepeatStatus repeatStatus;
-	bool shuffleStatus;
-
 };
 
 #endif // MPRIS2SOURCE_H

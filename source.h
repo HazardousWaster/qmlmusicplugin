@@ -2,6 +2,12 @@
 #include <QDeclarativeItem>
 #include <QTime>
 
+#include<vector>
+#include<papafactory/factory.h>
+
+#include "sourceoption.h"
+#include "sourcemanager.h"
+
 #ifndef SOURCE_H
 #define SOURCE_H
 
@@ -26,6 +32,8 @@ public:
 		REPEAT_SINGLE
 	};
 
+	typedef boost::mpl::list<QVariantMap> factory_constructor_typeList;
+
 	Source(QDeclarativeItem *parent);
 	Source();
 
@@ -33,7 +41,8 @@ public:
 
 	virtual void enable() {};
 	virtual void disable() {};
-	virtual QString getName() { return "Source"; };
+	virtual QString getName() { return name; };
+	virtual bool checkValid() { return true; };
 
 	virtual void playpause() {};
 	virtual void next() {};
@@ -52,6 +61,9 @@ public:
 	virtual PlayStatus getPlayStatus() { return PLAY_PLAYING; }
 	virtual RepeatStatus getRepeatStatus() { return REPEAT_NONE; }
 	virtual bool getShuffleStatus() { return false; }
+
+protected:
+	QString name;
 	
 signals:
 	void infoLine1Changed();

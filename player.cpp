@@ -1,39 +1,69 @@
 #include <QTime>
 #include <QDeclarativeContext>
 
+#include "papafactory/factory.h"
 #include "player.h"
-#include "vlcsource.h"
-#include "mpris2source.h"
-#include "bansheesource.h"
-#include "spotifysource.h"
-#include "auxsource.h"
+#include "source.h"
 
 Player::Player(QDeclarativeItem *parent)
 	: QDeclarativeItem(parent)
 {
-	qDebug() << "1";
 }
 	
 Player::Player()
 {
 	isBanshee = true;
 
-	m_sources.append(new BansheeSource());
-	m_sources.append(new VlcSource());
-	m_sources.append(new SpotifySource());
-	m_sources.append(new AuxSource());
-
+	m_sources = QList<SourceOption*>();
 	m_activeSource = NULL;
-	selectSource("Aux");
+	scanSources();
+	selectSource(0);
+}
 
-	//ctxt->setContextProperty("sources", QVariant::fromValue(m_sources));
+void Player::scanSources()
+{
+	m_sources.clear();
+	m_sources.append(SourceManager::instance().getSourceOptions());
+	emit sourceListChanged(QDeclarativeListProperty<SourceOption>(this, m_sources));
+}
+
+void Player::selectSource(int index)
+{
+	SourceOption *option = m_sources[index];
+	qDebug() << "Selecting " << option->name << option->classname;
+
+	QByteArray ba = option->classname.toLocal8Bit();
+
+	boost::shared_ptr<Source> sharedSource(papa::factory<Source>::instance().Create(ba.data(), option->params));
+	
+	qDebug() << sharedSource;
+	Source* source = sharedSource.get();
+
+	if (m_activeSource != source)
+	{
+		if (m_activeSource != NULL)
+		{
+			m_activeSource->disable();
+			disconnectSignals();
+		}
+
+		m_activeSource = source;
+		m_sharedSource = sharedSource;
+		connectSignals();
+		m_activeSource->enable();
+		emit activeSourceNameChanged(option->name);
+		infoLine1Changed();
+		infoLine2Changed();
+		playbackStatusChanged();
+		repeatStatusChanged();
+		shuffleStatusChanged();
+	}
 }
 
 void Player::connectSignals()
 {
 	QObject::connect(m_activeSource, SIGNAL(infoLine1Changed()), this, SLOT(infoLine1Changed()));
 	QObject::connect(m_activeSource, SIGNAL(infoLine2Changed()), this, SLOT(infoLine2Changed()));
-
 	QObject::connect(m_activeSource, SIGNAL(trackChanged()), this, SLOT(trackChanged()));
 	QObject::connect(m_activeSource, SIGNAL(playbackStatusChanged()), this, SLOT(playbackStatusChanged()));
 	QObject::connect(m_activeSource, SIGNAL(repeatStatusChanged()), this, SLOT(repeatStatusChanged()));
@@ -49,37 +79,6 @@ void Player::disconnectSignals()
 	QObject::disconnect(m_activeSource, SIGNAL(playbackStatusChanged()), this, SLOT(playbackStatusChanged()));
 	QObject::disconnect(m_activeSource, SIGNAL(repeatStatusChanged()), this, SLOT(repeatStatusChanged()));
 	QObject::disconnect(m_activeSource, SIGNAL(shuffleStatusChanged()), this, SLOT(shuffleStatusChanged()));
-}
-
-
-void Player::selectSource(QString name)
-{
-	qDebug() << "Selecting " << name;
-
-	QListIterator<Source*> it(m_sources);
-	while (it.hasNext())
-	{
-		Source* source = it.next();
-
-		if (source->getName() == name && (m_activeSource != source))
-		{
-			if (m_activeSource != NULL)
-			{
-				m_activeSource->disable();
-				disconnectSignals();
-			}
-		
-			m_activeSource = source;
-			connectSignals();
-			m_activeSource->enable();
-			emit activeSourceNameChanged(name);
-			infoLine1Changed();
-			infoLine2Changed();
-			playbackStatusChanged();
-			repeatStatusChanged();
-			shuffleStatusChanged();
-		}
-	}
 }
 
 QString Player::activeSourceName()

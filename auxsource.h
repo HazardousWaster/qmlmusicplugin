@@ -5,6 +5,9 @@ class AuxSource : public Source
 	Q_OBJECT
 
 public:
+	static QList<SourceOption*> getSourceOptions();
+
+	AuxSource(QVariantMap params) {}
 	AuxSource();
 	
 	void enable();
